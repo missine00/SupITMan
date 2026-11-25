@@ -36,8 +36,10 @@ a{color:inherit;text-decoration:none}
 .nav-cta:hover{background:#67E8F9}
 .menu-btn{display:none;background:none;border:1px solid rgba(255,255,255,.2);border-radius:8px;
   width:40px;height:36px;font-size:18px;color:#fff;cursor:pointer}
-.section{padding:92px 0}
+.section{padding:60px 0}
 .section.alt{background:var(--surface);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.fit-section{background:var(--bg);padding-top:0}
+.fit-section .wrap{border-top:1px solid var(--line);padding-top:48px}
 .eyebrow{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:12px;
   letter-spacing:.1em;color:#0E7490;background:#E6FAFC;border:1px solid #B6E8F0;
   padding:5px 11px;border-radius:6px;margin-bottom:18px}
@@ -191,6 +193,14 @@ details .answer{padding:0 22px 20px;color:var(--muted);font-size:14px;margin:0}
 .form-note{font-size:12px;color:#7E93AA;margin-top:10px}
 .form-success{display:none;font-size:13px;color:var(--cyan);margin-top:14px;line-height:1.7}
 .form-success.show{display:block}
+.float-cta{position:fixed;right:24px;bottom:24px;z-index:60;display:flex;align-items:center;gap:8px;
+  padding:13px 20px;border-radius:999px;background:var(--cyan);color:var(--navy);
+  font-size:14px;font-weight:700;box-shadow:0 8px 28px rgba(34,211,238,.35);
+  opacity:0;transform:translateY(14px);pointer-events:none;transition:opacity .25s,transform .25s}
+.float-cta.show{opacity:1;transform:none;pointer-events:auto}
+.float-cta:hover{background:#67E8F9}
+.float-cta .dot{width:7px;height:7px;border-radius:50%;background:var(--navy)}
+@media(max-width:700px){.float-cta{right:16px;bottom:16px;padding:11px 16px;font-size:13px}}
 footer{padding:30px 0;background:var(--navy);color:#7E93AA;font-size:13px;border-top:1px solid rgba(255,255,255,.08)}
 .footer-inner{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;align-items:center}
 .reveal{opacity:0;transform:translateY(14px);transition:opacity .5s ease,transform .5s ease}
@@ -208,7 +218,7 @@ footer{padding:30px 0;background:var(--navy);color:#7E93AA;font-size:13px;border
   .nav.open{display:flex}
 }
 @media(max-width:600px){
-  .section{padding:64px 0}
+  .section{padding:48px 0}
   .grid-2,.grid-4,.fit-grid{grid-template-columns:1fr}
   .steps{grid-template-columns:1fr}
   .hero{padding:56px 0 64px}
@@ -299,7 +309,7 @@ footer{padding:30px 0;background:var(--navy);color:#7E93AA;font-size:13px;border
         <span class="eyebrow">預設入門 · 最低試錯成本</span>
         <h3>兩小時到場快速評估</h3>
         <div class="price" id="starterPrice">HK$800 / 2 小時</div>
-        <div class="unit" id="starterUnit">1–10 人公司 · 到場看實際流程 · 當場改好一個卡住的地方 · 會後一封一頁建議摘要</div>
+        <div class="unit" id="starterUnit">1–10 人公司 · 到場看實際流程 · 當場動手改 · 會後一封一頁建議摘要</div>
         <div class="mini-prices">
           <button type="button" class="mini is-active" data-label="1–10 人公司" data-price="HK$800 / 2 小時">1–10 人：HK$800</button>
           <button type="button" class="mini" data-label="11–30 人公司" data-price="HK$1,500 / 2 小時">11–30 人：HK$1,500</button>
@@ -311,8 +321,7 @@ footer{padding:30px 0;background:var(--navy);color:#7E93AA;font-size:13px;border
         <p>還不確定適不適合？先約 15 分鐘免費線上初談，我只判斷需求、不隔空給建議；合適再約到場快速評估。</p>
         <p>核心服務對象為 20–30 人公司；更小或更大的團隊也歡迎預約，按實際情況報價。</p>
         <p>市區交通已包含；離島及偏遠地區另加 HK$300–500。</p>
-        <p>2 小時內我會當場幫你改好一個卡住的地方——例如一條 Excel 公式、一張重複的表——讓你當場就看到差別。這包含在評估內；較大的改動才屬下一階段，我會先確認時間與費用再繼續，不偷襲收費。</p>
-        <p><strong>評估後 14 日內簽健檢，已付的評估費全數扣抵——等於首次評估免費。</strong></p>
+        <p>2 小時內我會直接動手改——從最卡你的地方開始，一條公式、一張表，邊做邊讓你看到差別。這段時間本來就是拿來解決問題的，不只是給建議；所做的都包含在評估內。時間到我就停，之後想繼續再談範圍與費用，不偷襲收費。</p>
       </div>
     </div>
     <div class="grid-4">
@@ -398,7 +407,7 @@ footer{padding:30px 0;background:var(--navy);color:#7E93AA;font-size:13px;border
   </div>
 </section>
 
-<section class="section alt" id="fit">
+<section class="section fit-section" id="fit">
   <div class="wrap">
     <span class="eyebrow reveal">適合找我嗎</span>
     <h2 class="reveal">如果你的公司長這樣，我們應該聊得來</h2>
@@ -426,14 +435,13 @@ footer{padding:30px 0;background:var(--navy);color:#7E93AA;font-size:13px;border
       <details><summary>15 分鐘線上初談會做什麼？</summary><p class="answer">先用 WhatsApp 聊，只用來判斷你的需求適不適合我，以及下一步該走哪條路。我不會隔空給建議——那對你不公平，也浪費你的時間。合適的話，再約兩小時到場快速評估。</p></details>
       <details><summary>為什麼要先 WhatsApp，不能直接約到場？</summary><p class="answer">先聊 15 分鐘，我可以先了解你的狀況，也能告訴你這次適不適合讓我到場——若你的需求其實用一通電話就能解決，我不會叫你花錢約到場。對你省時間，對我也能準備得更充分。</p></details>
       <details><summary>兩小時到場快速評估實際會做什麼？</summary><p class="answer">我會到你看現場，實際看流程怎麼跑、問關鍵的人幾個問題，當場告訴你我看到的問題和優先次序。會後再寄一封一頁的建議摘要給你。不含完整盤點與規格文件——那是健檢的工作。</p></details>
-      <details><summary>如果當場發現需要超過兩小時怎麼辦？</summary><p class="answer">兩小時是評估的上限。我會當場改好一個最卡的小地方讓你看到差別，但不會在兩小時內變成完整開發——時間到我就會停，其餘屬於下一階段。若你當場想多做一點，我會先跟你確認要加多少時間、費用怎麼算，得到你同意才繼續——不會事後才跟你收費。延長的費用同樣可以在 14 日內簽健檢時扣抵。</p></details>
-      <details><summary>做完評估之後一定要繼續買服務嗎？</summary><p class="answer">不用。你可以拿著建議自己找人做。如果 14 日內決定做健檢，評估的費用會全數扣抵，所以先來看看並不吃虧。</p></details>
+      <details><summary>如果當場發現需要超過兩小時怎麼辦？</summary><p class="answer">兩小時是評估的上限。我會當場先從最卡你的地方動手改，讓你看到差別，但不會在兩小時內變成完整開發——時間到我就會停，其餘屬於下一階段。若你當場想多做一點，我會先跟你確認要加多少時間、費用怎麼算，得到你同意才繼續——不會事後才跟你收費。</p></details>
       <details><summary>你會自己寫程式嗎？還是幫我找人？</summary><p class="answer">看需求大小。簡單的我自己動手；需要完整系統時，我負責規格、找配合的開發夥伴與驗收，你只有我一個窗口。不適合我做的我會直接轉介，不硬接。</p></details>
       <details><summary>我只有一個簡單的網站需求，也能找你嗎？</summary><p class="answer">可以。公司介紹頁、小型工具、資料處理腳本這類需求，我可以直接做，成本低、時間短。先寄給我描述，我會告訴你大概要多少。</p></details>
       <details><summary>你的團隊很小，能處理我們公司的問題嗎？</summary><p class="answer">我本身就是兩人公司做了十年系統。20–30 人公司遇到的限制，我幾乎都親身經歷過，這反而讓建議更貼近現實。</p></details>
       <details><summary>需要先買什麼軟件或系統嗎？</summary><p class="answer">不一定要。健檢階段會先盤點你已經有的工具，很多改善可以從現有工具開始，不需要先採購。</p></details>
       <details><summary>做完健檢之後一定要繼續買服務嗎？</summary><p class="answer">不用。健檢報告你可以自己拿去用，也可以找別人執行。我希望你覺得有用，下次有需要再回來找我。</p></details>
-      <details><summary>多久可以看到成果？</summary><p class="answer">快一點的話，第一次到場你就會看到——我會當場改好一條卡住的 Excel 公式或一張重複的表，讓你立刻感受到差別。健檢一週內交付；試點通常 3–6 週會有一個能實際使用的版本。我重視的是真的上線，不是文件寫完。</p></details>
+      <details><summary>多久可以看到成果？</summary><p class="answer">快一點的話，第一次到場你就會看到——我會當場動手，從最卡你的公式或表開始改，讓你立刻感受到差別。健檢一週內交付；試點通常 3–6 週會有一個能實際使用的版本。我重視的是真的上線，不是文件寫完。</p></details>
     </div>
   </div>
 </section>
@@ -465,6 +473,8 @@ footer{padding:30px 0;background:var(--navy);color:#7E93AA;font-size:13px;border
 
 </main>
 
+<a class="float-cta" id="floatCta" href="#contact"><span class="dot"></span>預約 2 小時到場評估</a>
+
 <footer>
   <div class="wrap footer-inner">
     <span>© 2026 SupITMan · 系統與工作流顧問 · 把混亂變成系統</span>
@@ -492,7 +502,7 @@ miniChips.forEach(chip=>{
     miniChips.forEach(c=>c.classList.remove('is-active'));
     chip.classList.add('is-active');
     starterPrice.textContent=chip.dataset.price;
-    starterUnit.textContent=chip.dataset.label+' · 到場看實際流程 · 當場改好一個卡住的地方 · 會後一封一頁建議摘要';
+    starterUnit.textContent=chip.dataset.label+' · 到場看實際流程 · 當場動手改 · 會後一封一頁建議摘要';
   };
   chip.addEventListener('mouseenter',show);
   chip.addEventListener('focus',show);
@@ -530,6 +540,17 @@ if('IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-moti
   },{threshold:.12});
   items.forEach(el=>io.observe(el));
 }else{items.forEach(el=>el.classList.add('in'));}
+
+const floatCta=document.getElementById('floatCta');
+const contactSection=document.getElementById('contact');
+function updateFloatCta(){
+  const pastHero=window.scrollY>window.innerHeight*.7;
+  const atForm=contactSection&&window.scrollY+window.innerHeight>contactSection.offsetTop+200;
+  floatCta.classList.toggle('show',pastHero&&!atForm);
+}
+window.addEventListener('scroll',updateFloatCta,{passive:true});
+window.addEventListener('resize',updateFloatCta);
+updateFloatCta();
 </script>
 </body>
 </html>
