@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SupITMan｜香港系統與工作流顧問 · 把重複的事，變成會自己跑的系統</title>
+<meta name="description" content="SupITMan — 香港系統與工作流顧問，十年兩人公司獨立開發系統經驗，專幫 20–30 人的中小企找出重工流程、做出能用的自動化系統，並留下能自己維護的團隊能力。">
+<meta name="theme-color" content="#060B14">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect x='2' y='2' width='96' height='96' rx='26' fill='%230B1524' stroke='%2322D3EE' stroke-width='2'/%3E%3Cpath d='M74 28H42C26 28 26 50 42 50H58C74 50 74 72 58 72H28' fill='none' stroke='%2322D3EE' stroke-width='8' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='74' cy='28' r='6' fill='%2367E8F9'/%3E%3Ccircle cx='28' cy='72' r='6' fill='%2322D3EE'/%3E%3C/svg%3E">
+<style>
+:root{
+  --navy:#060B14; --navy2:#0B1524; --panel:#101C2E;
+  --bg:#F3F6FA; --surface:#FFFFFF; --ink:#0E1A2B; --muted:#5B6B80;
+  --line:#DCE4ED; --cyan:#22D3EE; --teal:#0EA5A4;
+  --amber:#B45309; --amber-soft:#FEF3C7;
+  --radius:14px; --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:"PingFang TC","Microsoft JhengHei","Noto Sans TC","Helvetica Neue",Arial,sans-serif;
+  line-height:1.75;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+.wrap{width:min(1120px,calc(100% - 40px));margin:0 auto}
+.site-header{position:sticky;top:0;z-index:50;background:rgba(6,11,20,.92);
+  backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,.09)}
+.header-inner{display:flex;align-items:center;justify-content:space-between;height:68px}
+.brand{display:flex;flex-direction:column;align-items:flex-start;color:#fff;line-height:1.1}
+.brand-logo{height:40px;width:auto;display:block}
+.brand-sub{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.16em;
+  color:var(--cyan);padding-left:2px;margin-top:5px}
+@media(max-width:700px){.brand-logo{height:36px}.brand-sub{font-size:9px}}
+.nav{display:flex;align-items:center;gap:22px;font-size:13px;color:#A9B8CC}
+.nav a:hover{color:var(--cyan)}
+.nav-cta{padding:8px 15px;border-radius:8px;background:var(--cyan);color:var(--navy)!important;font-weight:700}
+.nav-cta:hover{background:#67E8F9}
+.menu-btn{display:none;background:none;border:1px solid rgba(255,255,255,.2);border-radius:8px;
+  width:40px;height:36px;font-size:18px;color:#fff;cursor:pointer}
+.section{padding:92px 0}
+.section.alt{background:var(--surface);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:12px;
+  letter-spacing:.1em;color:#0E7490;background:#E6FAFC;border:1px solid #B6E8F0;
+  padding:5px 11px;border-radius:6px;margin-bottom:18px}
+.eyebrow:before{content:"";width:6px;height:6px;background:currentColor;border-radius:1px;flex:none}
+h1,h2,h3{line-height:1.3;margin:0 0 16px;letter-spacing:-.02em}
+h1{font-size:clamp(36px,5.4vw,60px);font-weight:800;line-height:1.15;letter-spacing:-.035em}
+h2{font-size:clamp(26px,3.6vw,38px);font-weight:800}
+h3{font-size:18px;font-weight:700}
+.lead{font-size:clamp(16px,1.8vw,19px);max-width:640px;margin:0 0 28px}
+.section-lead{color:var(--muted);max-width:680px;margin:-4px 0 40px;font-size:16px}
+.hero{position:relative;overflow:hidden;padding:88px 0 96px;color:#fff;
+  background:radial-gradient(circle at 82% 18%,rgba(34,211,238,.16),transparent 42%),
+             linear-gradient(180deg,#060B14 0%,#0A1423 100%)}
+.hero:before,.contact-box:before{content:"";position:absolute;inset:0;pointer-events:none;
+  background-image:linear-gradient(rgba(255,255,255,.045) 1px,transparent 1px),
+                   linear-gradient(90deg,rgba(255,255,255,.045) 1px,transparent 1px);
+  background-size:46px 46px}
+.hero .wrap,.contact-box .wrap,.contact-grid{position:relative;z-index:1}
+.hero-grid{display:grid;grid-template-columns:1.08fr .92fr;gap:56px;align-items:center}
+.sys-line{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:#5F7C93;margin-bottom:18px}
+.hero .eyebrow{color:var(--cyan);background:rgba(34,211,238,.1);border-color:rgba(34,211,238,.35)}
+.hero .lead{color:#A9B8CC;margin-bottom:30px}
+.accent-text{color:var(--cyan)}
+.buttons{display:flex;gap:12px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  padding:13px 22px;border-radius:9px;font-size:15px;font-weight:700;cursor:pointer;border:1px solid transparent;
+  transition:background .2s,border-color .2s,color .2s,transform .2s}
+.btn:hover{transform:translateY(-1px)}
+.btn-primary{background:var(--cyan);color:var(--navy)}
+.btn-primary:hover{background:#67E8F9}
+.btn-ghost{background:transparent;border-color:rgba(255,255,255,.25);color:#fff}
+.btn-ghost:hover{border-color:var(--cyan);color:var(--cyan)}
+.hero-note{margin-top:26px;font-size:13px;color:#8FA3BA;display:flex;align-items:center;gap:8px}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--cyan);flex:none;
+  box-shadow:0 0 0 4px rgba(34,211,238,.12)}
+.viz{position:relative;background:rgba(11,21,36,.72);border:1px solid rgba(34,211,238,.25);
+  border-radius:18px;padding:24px;backdrop-filter:blur(8px);box-shadow:0 24px 60px rgba(0,0,0,.28)}
+.viz-status{position:absolute;top:16px;right:18px;font-family:var(--mono);font-size:10px;
+  letter-spacing:.1em;color:#6E8CA4;display:flex;align-items:center;gap:6px}
+.viz-status span{width:5px;height:5px;border-radius:50%;background:var(--cyan)}
+.viz-card{border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:16px 18px;
+  background:rgba(255,255,255,.03);margin-top:18px;color:#C7D5E5}
+.viz-label{font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:var(--cyan);margin-bottom:12px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font-size:13px;padding:6px 11px;border-radius:7px;background:rgba(255,255,255,.05);
+  color:#B8C6D8;border:1px dashed rgba(148,163,184,.4)}
+.viz-arrow{text-align:center;color:var(--cyan);font-size:20px;line-height:1;margin:14px 0;font-weight:700}
+.viz-card.after{background:rgba(34,211,238,.08);border-color:rgba(34,211,238,.35)}
+.flow{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.flow span{font-size:13px;font-weight:600;color:#CFFAFE;background:#0E1B2C;
+  padding:7px 11px;border-radius:7px;border:1px solid rgba(34,211,238,.35)}
+.flow i{font-style:normal;color:var(--cyan);font-size:13px}
+.viz-note{margin-top:12px;font-size:12px;color:#9EE9F5}
+.grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.callout{border-left:3px solid var(--teal);padding:4px 0 4px 16px;
+  color:var(--muted);font-size:15px;margin-top:28px}
+.starter{background:linear-gradient(120deg,#062A2E,#0B1B2B);border:1px solid rgba(34,211,238,.35);
+  border-radius:var(--radius);padding:26px 28px;margin-bottom:22px;
+  display:grid;grid-template-columns:1.1fr .9fr;gap:24px;align-items:center;color:#fff;
+  box-shadow:0 16px 40px rgba(6,42,46,.16)}
+.starter .eyebrow{color:var(--cyan);background:rgba(34,211,238,.1);border-color:rgba(34,211,238,.3);margin-bottom:10px}
+.starter h3{margin-bottom:4px}
+.starter .price{font-family:var(--mono);font-size:26px;font-weight:800;color:var(--cyan);margin:4px 0;letter-spacing:-.02em}
+.starter .unit{font-size:13px;color:#B8CCDA}
+.mini-prices{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.mini{background:rgba(255,255,255,.06);border:1px solid rgba(34,211,238,.3);
+  border-radius:7px;padding:7px 11px;font-size:12px;color:#D6F7FA;font-family:var(--mono);
+  cursor:pointer;transition:background .2s,border-color .2s,color .2s}
+.mini:hover,.mini.is-active{background:rgba(34,211,238,.18);border-color:var(--cyan);color:#fff}
+.btn-quick{margin-top:14px;font-size:13px;padding:9px 14px;
+  background:rgba(34,211,238,.12);border-color:rgba(34,211,238,.5);color:var(--cyan)}
+.btn-quick:hover{background:var(--cyan);color:var(--navy)}
+.starter-copy{font-size:14px;color:#B8CCDA}
+.starter-copy p{margin:0 0 10px}
+.starter-copy strong{color:var(--cyan)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:26px;
+  transition:transform .2s,border-color .2s,box-shadow .2s}
+.card:hover{transform:translateY(-3px);border-color:rgba(14,165,164,.45);
+  box-shadow:0 14px 32px rgba(14,165,164,.08)}
+.card h3{margin-bottom:8px}
+.card p{margin:0;color:var(--muted);font-size:14px}
+.card .num{display:grid;place-items:center;width:34px;height:34px;border-radius:8px;
+  background:#E6FAFC;color:#0E7490;border:1px solid #B6E8F0;
+  font-family:var(--mono);font-weight:800;font-size:13px;margin-bottom:16px}
+.quote-band{position:relative;overflow:hidden;background:linear-gradient(120deg,#060B14,#0D1B2E);
+  border:1px solid rgba(34,211,238,.25);color:#fff;border-radius:16px;padding:32px 36px;margin-top:36px}
+.quote-band:before{content:"";position:absolute;inset:0;pointer-events:none;
+  background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px);
+  background-size:100% 24px}
+.quote-band p{position:relative;margin:0;font-size:clamp(18px,2.4vw,24px);font-weight:600;line-height:1.6}
+.quote-band span{color:var(--cyan)}
+.service{position:relative;display:flex;flex-direction:column;min-height:100%}
+.service .tag{position:absolute;top:22px;right:22px;font-size:11px;font-weight:700;
+  color:var(--amber);background:var(--amber-soft);padding:4px 9px;border-radius:6px}
+.service .unit-lead{font-family:var(--mono);font-size:15px;font-weight:700;color:var(--teal);
+  margin:18px 0 4px;letter-spacing:-.01em}
+.service .unit{font-size:13px;color:var(--muted);margin-bottom:16px}
+.service ul{list-style:none;padding:0;margin:16px 0 0;font-size:14px;color:var(--muted)}
+.service li{padding-left:18px;position:relative;margin-bottom:7px}
+.service li:before{content:"";position:absolute;left:0;top:10px;width:6px;height:6px;
+  border-radius:1px;background:var(--teal)}
+.price-note{color:var(--muted);font-size:12px;margin-top:20px}
+.steps{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;counter-reset:s}
+.step{background:var(--surface);border:1px solid var(--line);border-top:2px solid rgba(14,165,164,.4);
+  border-radius:12px;padding:22px 18px;position:relative}
+.step:before{counter-increment:s;content:counter(s,decimal-leading-zero);display:block;
+  font-family:var(--mono);font-size:12px;font-weight:800;color:#0E7490;margin-bottom:12px}
+.step h3{font-size:15px;margin-bottom:6px}
+.step p{font-size:13px;color:var(--muted);margin:0}
+#about{background:linear-gradient(180deg,#0A1423,#060B14);color:#fff;border-top:1px solid rgba(34,211,238,.12)}
+#about .eyebrow{color:var(--cyan);background:rgba(34,211,238,.1);border-color:rgba(34,211,238,.3)}
+.about-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:48px;align-items:start}
+.about-big{font-size:clamp(28px,4vw,42px);font-weight:800;line-height:1.35;margin-bottom:0}
+.about-big em{font-style:normal;color:var(--cyan)}
+#about .section-lead{color:#A9B8CC}
+.check-list{list-style:none;padding:0;margin:0}
+.check-list li{padding:13px 0 13px 34px;position:relative;border-bottom:1px solid var(--line);font-size:15px}
+.check-list li:last-child{border-bottom:none}
+.check-list li:before{content:"✓";position:absolute;left:0;top:13px;color:var(--teal);font-weight:800}
+#about .check-list li{border-color:rgba(255,255,255,.12);color:#D6E2F0}
+#about .check-list li:before{color:var(--cyan)}
+.fit-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:0 40px}
+details{background:var(--surface);border:1px solid var(--line);border-radius:10px;margin-bottom:12px;overflow:hidden}
+summary{cursor:pointer;padding:18px 22px;font-weight:700;font-size:15px;list-style:none;
+  display:flex;justify-content:space-between;align-items:center;gap:16px}
+summary::-webkit-details-marker{display:none}
+summary:after{content:"+";color:#0E7490;font-family:var(--mono);font-size:18px;line-height:1;flex:none}
+details[open] summary:after{content:"−"}
+details .answer{padding:0 22px 20px;color:var(--muted);font-size:14px;margin:0}
+.contact-box{position:relative;overflow:hidden;background:radial-gradient(circle at 85% 20%,rgba(34,211,238,.14),transparent 45%),
+  linear-gradient(120deg,#060B14,#0D1B2E);color:#fff;border:1px solid rgba(34,211,238,.25);
+  border-radius:20px;padding:44px}
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:44px;align-items:start}
+.contact-box h2{color:#fff}
+.contact-eyebrow{color:var(--cyan);background:rgba(34,211,238,.1);border-color:rgba(34,211,238,.3)}
+.contact-box .lead{color:#A9B8CC}
+.contact-meta{font-size:14px;color:#A9B8CC;margin-top:28px}
+.contact-email{color:var(--cyan)}
+.contact-box .btn-primary{background:#fff;color:var(--navy);width:100%}
+.contact-box .btn-primary:hover{background:var(--cyan)}
+.field{margin-bottom:14px}
+.field label{display:block;font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:#8FA3BA;margin-bottom:6px}
+.field input,.field textarea,.field select{width:100%;padding:11px 13px;border-radius:8px;
+  border:1px solid rgba(255,255,255,.16);background:#101C2E;color:#fff;
+  font:inherit;font-size:14px;outline:none;color-scheme:dark}
+.field option{background:#101C2E;color:#fff}
+.field input:focus,.field textarea:focus,.field select:focus{border-color:var(--cyan)}
+.field textarea{min-height:96px;resize:vertical}
+.form-note{font-size:12px;color:#7E93AA;margin-top:10px}
+.form-success{display:none;font-size:13px;color:var(--cyan);margin-top:14px;line-height:1.7}
+.form-success.show{display:block}
+footer{padding:30px 0;background:var(--navy);color:#7E93AA;font-size:13px;border-top:1px solid rgba(255,255,255,.08)}
+.footer-inner{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;align-items:center}
+.reveal{opacity:0;transform:translateY(14px);transition:opacity .5s ease,transform .5s ease}
+.reveal.in{opacity:1;transform:none}
+@media(max-width:900px){
+  .hero-grid,.about-grid,.contact-grid{grid-template-columns:1fr;gap:34px}
+  .grid-4{grid-template-columns:repeat(2,1fr)}
+  .grid-3{grid-template-columns:1fr}
+  .starter{grid-template-columns:1fr;gap:18px}
+  .steps{grid-template-columns:repeat(2,1fr)}
+  .menu-btn{display:block}
+  .nav{display:none;position:absolute;top:68px;left:0;right:0;background:#0A1423;
+    padding:18px 20px;flex-direction:column;align-items:stretch;gap:14px;
+    border-bottom:1px solid rgba(255,255,255,.1)}
+  .nav.open{display:flex}
+}
+@media(max-width:600px){
+  .section{padding:64px 0}
+  .grid-2,.grid-4,.fit-grid{grid-template-columns:1fr}
+  .steps{grid-template-columns:1fr}
+  .hero{padding:56px 0 64px}
+  .viz{padding:16px}
+  .contact-box{padding:28px 22px}
+}
+@media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none}html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="#top"><img class="brand-logo" src="supitman-header.svg" alt="SupITMan"><span class="brand-sub">SYSTEMS / WORKFLOWS / HONG KONG</span></a>
+    <button class="menu-btn" id="menuBtn" aria-label="開啟選單" aria-expanded="false">☰</button>
+    <nav class="nav" id="nav">
+      <a href="#pain">痛點</a>
+      <a href="#services">服務與報價</a>
+      <a href="#approach">做法</a>
+      <a href="#process">合作流程</a>
+      <a href="#about">關於我</a>
+      <a href="#faq">常見問題</a>
+      <a class="nav-cta" href="#contact">預約評估</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="sys-line">SYSTEMS / WORKFLOWS / AUTOMATION — HONG KONG</div>
+      <span class="eyebrow">SupITMan · 系統與工作流顧問 · 服務香港 20–30 人公司</span>
+      <h1>把重複的事，<br><span class="accent-text">變成會自己跑的系統。</span></h1>
+      <p class="lead">你不需要一份漂亮的 AI 戰略簡報。你需要有人真的進來，找出每天在浪費時間的流程、改掉它、上線它，然後留下一套你自己人就能維護的東西。</p>
+      <div class="buttons">
+        <a class="btn btn-primary" href="#contact">預約 2 小時到場快速評估 →</a>
+        <a class="btn btn-ghost" href="#services">看看服務與報價</a>
+      </div>
+      <p class="hero-note"><span class="dot"></span>十年獨立開發系統經驗，從需求到上線，全程我親自把關。</p>
+    </div>
+    <div class="viz" aria-label="從人工重工到自動化流程的示意圖">
+      <div class="viz-status"><span></span>PROCESS MAP / LIVE</div>
+      <div class="viz-card">
+        <div class="viz-label">現在 · 靠人記、靠人工搬</div>
+        <div class="chips">
+          <span class="chip">人手逐格輸入 Excel</span><span class="chip">WhatsApp 催資料</span>
+          <span class="chip">樣樣嘢都要問番負責員工</span>
+          <span class="chip">Email 附件</span><span class="chip">人工核對</span>
+          <span class="chip">每月重來一次</span>
+        </div>
+      </div>
+      <div class="viz-arrow">↓</div>
+      <div class="viz-card after">
+        <div class="viz-label">之後 · 流程自己跑</div>
+        <div class="flow"><span>收集</span><i>→</i><span>處理</span><i>→</i><span>通知</span><i>→</i><span>報表</span></div>
+        <div class="viz-note">同一件事，不再靠某個人記住。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section alt" id="pain">
+  <div class="wrap">
+    <span class="eyebrow reveal">你公司的日常</span>
+    <h2 class="reveal">這些是不是每天在發生？</h2>
+    <p class="section-lead reveal">不是公司不努力，是流程在吃掉人的時間。而這些問題，通常不需要換一整套系統就能改善。</p>
+    <div class="grid-4">
+      <div class="card reveal"><div class="num">01</div><h3>資料一直人工搬</h3><p>Excel、WhatsApp、Email 三頭跑，對錯只能靠眼睛看，改一次就要重查一遍。</p></div>
+      <div class="card reveal"><div class="num">02</div><h3>老闆一個人兼三職</h3><p>想做自動化，但沒人有空研究工具，也沒人能決定到底該先做哪一件事。</p></div>
+      <div class="card reveal"><div class="num">03</div><h3>人一走就沒人會</h3><p>流程都存在腦子裡，交接靠口耳相傳，新進的人要摸索好幾個月。</p></div>
+      <div class="card reveal"><div class="num">04</div><h3>想用 AI，不知從何開始</h3><p>聽了很多案例，但沒有一個講得清楚該怎麼套在自己公司，最後就不了了之。</p></div>
+    </div>
+    <div class="quote-band reveal">
+      <p>AI 只是工具之一。<span>真正要解決的，是那個每天都在浪費時間的環節。</span></p>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="services">
+  <div class="wrap">
+    <span class="eyebrow reveal">服務與報價</span>
+    <h2 class="reveal">從一小步開始，做出看得到的成果</h2>
+    <p class="section-lead reveal">不綁約、不框架。想先試試看，可以約一次兩小時到場快速評估；需要完整盤點，再進行健檢。</p>
+    <div class="starter reveal">
+      <div>
+        <span class="eyebrow">預設入門 · 最低試錯成本</span>
+        <h3>兩小時到場快速評估</h3>
+        <div class="price" id="starterPrice">HK$800 / 2 小時</div>
+        <div class="unit" id="starterUnit">1–10 人公司 · 到場看實際流程 · 當場改好一個卡住的地方 · 會後一封一頁建議摘要</div>
+        <div class="mini-prices">
+          <button type="button" class="mini is-active" data-label="1–10 人公司" data-price="HK$800 / 2 小時">1–10 人：HK$800</button>
+          <button type="button" class="mini" data-label="11–30 人公司" data-price="HK$1,500 / 2 小時">11–30 人：HK$1,500</button>
+          <button type="button" class="mini" data-label="30 人以上公司" data-price="HK$2,200 起 / 2 小時">30 人以上：HK$2,200 起</button>
+        </div>
+        <a class="btn btn-ghost btn-quick" id="quickChat" href="#">先約 15 分鐘線上初談（免費）→</a>
+      </div>
+      <div class="starter-copy">
+        <p>還不確定適不適合？先約 15 分鐘免費線上初談，我只判斷需求、不隔空給建議；合適再約到場快速評估。</p>
+        <p>核心服務對象為 20–30 人公司；更小或更大的團隊也歡迎預約，按實際情況報價。</p>
+        <p>市區交通已包含；離島及偏遠地區另加 HK$300–500。</p>
+        <p>2 小時內我會當場幫你改好一個卡住的地方——例如一條 Excel 公式、一張重複的表——讓你當場就看到差別。這包含在評估內；較大的改動才屬下一階段，我會先確認時間與費用再繼續，不偷襲收費。</p>
+        <p><strong>評估後 14 日內簽健檢，已付的評估費全數扣抵——等於首次評估免費。</strong></p>
+      </div>
+    </div>
+    <div class="grid-4">
+      <div class="card service reveal">
+        <div class="num">01</div><h3>系統與流程健檢</h3>
+        <div class="unit unit-lead">固定價 · 約 1 週</div>
+        <ul><li>訪談關鍵人員，盤點現有流程</li><li>找出最耗時、最易錯的環節</li><li>交付優先次序報告與改善建議</li></ul>
+      </div>
+      <div class="card service reveal">
+        <div class="num">02</div><h3>輕量實作與試點</h3>
+        <div class="unit unit-lead">專案制 · 3–6 週</div>
+        <ul><li>選一個最痛的流程動手</li><li>簡單網頁、腳本、工具對接我直接做</li><li>上線、訓練、留下操作說明</li></ul>
+      </div>
+      <div class="card service reveal">
+        <div class="num">03</div><h3>解法規劃與專案把關</h3>
+        <div class="unit unit-lead">規劃固定價 · 開發另議</div>
+        <ul><li>需求較大時，先比較三種做法與預算</li><li>我寫規格、找開發夥伴、管進度</li><li>我幫你驗收，你只有一個窗口</li></ul>
+      </div>
+      <div class="card service reveal">
+        <div class="num">04</div><h3>月度技術顧問</h3>
+        <div class="unit unit-lead">月費制 · 8–12 小時 / 月</div>
+        <ul><li>月度流程盤點與優先次序</li><li>有問題時有人可以問</li><li>調整工具、持續省下人時</li></ul>
+      </div>
+    </div>
+    <p class="price-note reveal">以上服務不採統一價目，按實際範圍與優先次序報價——你只為真正需要做的部分付費，費用會在評估後先講清楚再決定。按人天計為 HK$3,000–6,000/人天。初次合作建議先從兩小時到場快速評估開始。</p>
+  </div>
+</section>
+
+<section class="section alt" id="approach">
+  <div class="wrap">
+    <span class="eyebrow reveal">做法</span>
+    <h2 class="reveal">什麼我自己做，什麼我幫你找人？</h2>
+    <p class="section-lead reveal">每個問題需要的解法都不同。我會先找出最適合、最划算的做法，再調動對的人把它做出來——該我自己動手就動手，該找夥伴就找夥伴，全程我把關。你不用自己找人、比價、盯進度，從頭到尾只有我一個窗口。</p>
+    <div class="grid-3">
+      <div class="card reveal">
+        <div class="num">A</div><h3>我直接做</h3>
+        <p>需求清楚、一週內能完成，用現成工具或少量程式就夠。例如：公司介紹網頁、表單與資料自動化、報表腳本。</p>
+      </div>
+      <div class="card reveal">
+        <div class="num">B</div><h3>我找人，我把關</h3>
+        <p>需要完整系統、開發期較長。我定義需求、寫規格、找配合的開發夥伴、管進度、幫你驗收。你不用自己找人或盯人。</p>
+      </div>
+      <div class="card reveal">
+        <div class="num">C</div><h3>我轉介</h3>
+        <p>需要長期團隊或特殊領域，超出我適合的範圍。我介紹信任的對象給你，不收你開發費，也不從中收佣。</p>
+      </div>
+    </div>
+    <p class="callout reveal">先試現成工具，再談客製。很多時候八成的需求用現成工具就能解決，省下的錢比你想的多。</p>
+  </div>
+</section>
+
+<section class="section" id="process">
+  <div class="wrap">
+    <span class="eyebrow reveal">合作流程</span>
+    <h2 class="reveal">五步，從混亂到穩定</h2>
+    <p class="section-lead reveal">每一步都有明確交付物，你不會不知道錢花到哪裡去。</p>
+    <div class="steps">
+      <div class="step reveal"><h3>到場快速評估 2 小時</h3><p>先看現場、聽問題，當場給方向。</p></div>
+      <div class="step reveal"><h3>流程健檢</h3><p>盤點現況，產出優先次序報告。</p></div>
+      <div class="step reveal"><h3>選定試點</h3><p>挑一個見效最快的環節動手。</p></div>
+      <div class="step reveal"><h3>上線與訓練</h3><p>做到真的能用，不是交付一份文件。</p></div>
+      <div class="step reveal"><h3>月度顧問</h3><p>可選。有人幫你持續盯著、持續調整。</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="about">
+  <div class="wrap about-grid">
+    <div>
+      <span class="eyebrow reveal">關於我</span>
+      <p class="about-big reveal">我不是來講戰略的。<br>我是<em>真的把系統做出來</em>的那個人。</p>
+    </div>
+    <div>
+      <p class="section-lead reveal">十年，兩人公司，獨立開發系統。需求、架構、開發、上線、維護、跟客戶溝通——這些我一個人都扛過。</p>
+      <p class="section-lead reveal">所以我知道，20–30 人這種規模的公司，錢有多緊、時間有多短、人一走就沒人接。我不會給你一份做不出來的建議，因為我自己就是那個要把它做出來的人。</p>
+      <ul class="check-list reveal">
+        <li>十年獨立系統開發與上線經驗</li>
+        <li>熟悉小公司的真實限制，不是理想情境</li>
+        <li>能把模糊需求變成可運作的工具</li>
+        <li>AI 是工具，不是拿來賣的名詞</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="section alt" id="fit">
+  <div class="wrap">
+    <span class="eyebrow reveal">適合找我嗎</span>
+    <h2 class="reveal">如果你的公司長這樣，我們應該聊得來</h2>
+    <div class="fit-grid">
+      <ul class="check-list reveal">
+        <li>20–30 人左右，還沒有專職 IT 團隊</li>
+        <li>有一兩個流程，大家都覺得「很麻煩但一直沒空改」</li>
+        <li>資料還在 Excel、WhatsApp、Email 之間搬來搬去</li>
+      </ul>
+      <ul class="check-list reveal">
+        <li>老闆想自動化，但不知道第一步該做什麼</li>
+        <li>預算有限，需要先看到成果再談擴大</li>
+        <li>希望做出來的東西，自己人日後能接手</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="faq">
+  <div class="wrap">
+    <span class="eyebrow reveal">常見問題</span>
+    <h2 class="reveal">你可能在想的幾件事</h2>
+    <div class="reveal">
+      <details><summary>一定要用 AI 嗎？</summary><p class="answer">不一定。很多時候先把流程整理乾淨、把重複輸入拿掉，就已經省下大量時間。AI 只在它真的比較划算時才值得上。</p></details>
+      <details><summary>15 分鐘線上初談會做什麼？</summary><p class="answer">先用 WhatsApp 聊，只用來判斷你的需求適不適合我，以及下一步該走哪條路。我不會隔空給建議——那對你不公平，也浪費你的時間。合適的話，再約兩小時到場快速評估。</p></details>
+      <details><summary>為什麼要先 WhatsApp，不能直接約到場？</summary><p class="answer">先聊 15 分鐘，我可以先了解你的狀況，也能告訴你這次適不適合讓我到場——若你的需求其實用一通電話就能解決，我不會叫你花錢約到場。對你省時間，對我也能準備得更充分。</p></details>
+      <details><summary>兩小時到場快速評估實際會做什麼？</summary><p class="answer">我會到你看現場，實際看流程怎麼跑、問關鍵的人幾個問題，當場告訴你我看到的問題和優先次序。會後再寄一封一頁的建議摘要給你。不含完整盤點與規格文件——那是健檢的工作。</p></details>
+      <details><summary>如果當場發現需要超過兩小時怎麼辦？</summary><p class="answer">兩小時是評估的上限。我會當場改好一個最卡的小地方讓你看到差別，但不會在兩小時內變成完整開發——時間到我就會停，其餘屬於下一階段。若你當場想多做一點，我會先跟你確認要加多少時間、費用怎麼算，得到你同意才繼續——不會事後才跟你收費。延長的費用同樣可以在 14 日內簽健檢時扣抵。</p></details>
+      <details><summary>做完評估之後一定要繼續買服務嗎？</summary><p class="answer">不用。你可以拿著建議自己找人做。如果 14 日內決定做健檢，評估的費用會全數扣抵，所以先來看看並不吃虧。</p></details>
+      <details><summary>你會自己寫程式嗎？還是幫我找人？</summary><p class="answer">看需求大小。簡單的我自己動手；需要完整系統時，我負責規格、找配合的開發夥伴與驗收，你只有我一個窗口。不適合我做的我會直接轉介，不硬接。</p></details>
+      <details><summary>我只有一個簡單的網站需求，也能找你嗎？</summary><p class="answer">可以。公司介紹頁、小型工具、資料處理腳本這類需求，我可以直接做，成本低、時間短。先寄給我描述，我會告訴你大概要多少。</p></details>
+      <details><summary>你的團隊很小，能處理我們公司的問題嗎？</summary><p class="answer">我本身就是兩人公司做了十年系統。20–30 人公司遇到的限制，我幾乎都親身經歷過，這反而讓建議更貼近現實。</p></details>
+      <details><summary>需要先買什麼軟件或系統嗎？</summary><p class="answer">不一定要。健檢階段會先盤點你已經有的工具，很多改善可以從現有工具開始，不需要先採購。</p></details>
+      <details><summary>做完健檢之後一定要繼續買服務嗎？</summary><p class="answer">不用。健檢報告你可以自己拿去用，也可以找別人執行。我希望你覺得有用，下次有需要再回來找我。</p></details>
+      <details><summary>多久可以看到成果？</summary><p class="answer">快一點的話，第一次到場你就會看到——我會當場改好一條卡住的 Excel 公式或一張重複的表，讓你立刻感受到差別。健檢一週內交付；試點通常 3–6 週會有一個能實際使用的版本。我重視的是真的上線，不是文件寫完。</p></details>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="contact">
+  <div class="wrap">
+    <div class="contact-box reveal">
+      <div class="contact-grid">
+        <div>
+          <span class="eyebrow contact-eyebrow">下一步</span>
+          <h2>留個 WhatsApp，<br>先聊 15 分鐘。</h2>
+          <p class="lead">不用準備資料，也不用想清楚問題。留下聯絡方式，我會先用 WhatsApp 跟你聊 15 分鐘，判斷適不適合；合適再約 2 小時到場，當場給你方向。</p>
+          <p class="contact-meta">收到訊息後，我會用 WhatsApp 回覆你。<br>香港 · 一般工作日回覆</p>
+        </div>
+        <form id="contactForm">
+          <div class="field"><label for="f-name">你的名字</label><input id="f-name" name="name" required placeholder="王小明"></div>
+          <div class="field"><label for="f-phone">WhatsApp 號碼</label><input id="f-phone" name="phone" type="tel" required placeholder="9123 4567（+852）"></div>
+          <div class="field"><label for="f-company">公司名稱</label><input id="f-company" name="company" required placeholder="【公司名稱】"></div>
+          <div class="field"><label for="f-size">公司規模</label><select id="f-size" name="size"><option>1–10 人</option><option selected>11–30 人</option><option>30 人以上</option></select></div>
+          <div class="field"><label for="f-need">現在最頭痛的一件事（選填）</label><textarea id="f-need" name="need" placeholder="例如：每月訂單資料要人工整理三個小時…"></textarea></div>
+          <button class="btn btn-primary" type="submit">傳去 WhatsApp，約 15 分鐘聊聊 →</button>
+          <p class="form-note">按下後會開啟 WhatsApp 並預填一段訊息，你按「傳送」我就會收到。</p>
+          <p class="form-success" id="formSuccess">已開啟 WhatsApp。按「傳送」後，我會用 WhatsApp 回你，先聊 15 分鐘；合適才約到場。<br>若沒有自動開啟，請檢查瀏覽器是否封鎖彈出視窗，然後再按一次送出。</p>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap footer-inner">
+    <span>© 2026 SupITMan · 系統與工作流顧問 · 把混亂變成系統</span>
+    <span><a href="mailto:hello@example.com">【你的電郵】</a> · 【你的名字】</span>
+  </div>
+</footer>
+
+<script>
+const btn=document.getElementById('menuBtn');
+const nav=document.getElementById('nav');
+btn.addEventListener('click',()=>{
+  const open=nav.classList.toggle('open');
+  btn.setAttribute('aria-expanded',open?'true':'false');
+  btn.textContent=open?'×':'☰';
+});
+nav.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{
+  nav.classList.remove('open');btn.setAttribute('aria-expanded','false');btn.textContent='☰';
+}));
+
+const miniChips=document.querySelectorAll('.mini');
+const starterPrice=document.getElementById('starterPrice');
+const starterUnit=document.getElementById('starterUnit');
+miniChips.forEach(chip=>{
+  const show=()=>{
+    miniChips.forEach(c=>c.classList.remove('is-active'));
+    chip.classList.add('is-active');
+    starterPrice.textContent=chip.dataset.price;
+    starterUnit.textContent=chip.dataset.label+' · 到場看實際流程 · 當場改好一個卡住的地方 · 會後一封一頁建議摘要';
+  };
+  chip.addEventListener('mouseenter',show);
+  chip.addEventListener('focus',show);
+  chip.addEventListener('click',show);
+});
+
+const WA_NUMBER='85200000000';
+
+document.getElementById('quickChat').addEventListener('click',e=>{
+  e.preventDefault();
+  const msg='你好，我想約 15 分鐘免費線上初談。\n\n姓名：\n公司：\n規模：\n現在最頭痛的一件事：';
+  window.open('https://wa.me/'+WA_NUMBER+'?text='+encodeURIComponent(msg),'_blank','noopener');
+});
+
+const form=document.getElementById('contactForm');
+form.addEventListener('submit',e=>{
+  e.preventDefault();
+  const d=new FormData(form);
+  const raw=(d.get('phone')||'').replace(/[^0-9]/g,'');
+  const phone=raw.startsWith('852')?raw:'852'+raw;
+  const msg='你好，我想約 15 分鐘免費線上初談，看看適不適合。\n\n'
+    +'姓名：'+(d.get('name')||'')+'\n'
+    +'公司：'+(d.get('company')||'')+'\n'
+    +'規模：'+(d.get('size')||'')+'\n'
+    +'聯絡電話：'+phone+'\n\n'
+    +'現在最頭痛的一件事：\n'+(d.get('need')||'（未填）');
+  window.open('https://wa.me/'+WA_NUMBER+'?text='+encodeURIComponent(msg),'_blank','noopener');
+  document.getElementById('formSuccess').classList.add('show');
+});
+
+const items=document.querySelectorAll('.reveal');
+if('IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+  const io=new IntersectionObserver(entries=>{
+    entries.forEach(en=>{if(en.isIntersecting){en.target.classList.add('in');io.unobserve(en.target);}});
+  },{threshold:.12});
+  items.forEach(el=>io.observe(el));
+}else{items.forEach(el=>el.classList.add('in'));}
+</script>
+</body>
+</html>
